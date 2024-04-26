@@ -206,9 +206,6 @@ vignettes/*.pdf
 .Renviron
 renv/
 
-## pkgdown site
-docs/
-
 ## translation temp files
 po/*~
 
