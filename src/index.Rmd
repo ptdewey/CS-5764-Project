@@ -12,30 +12,38 @@ output:
     fig_caption: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# Packages
+library(plotly)
+library(ggplot2)
+library(gapminder)
+library(reticulate)
 ```
 
-## R Markdown
+## R Visualization
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r echo = TRUE, warning = FALSE}
+plotly::ggplotly(ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
+  geom_point(aes(size = pop, frame = year, ids = country)) +
+  scale_x_log10())
 ```
 
-## Including Plots
+## Python Visualization
 
-You can also embed plots, for example:
+```{python message = FALSE}
+import numpy as np
+import matplotlib.pyplot as plt
+import plotly.express as px
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+df = px.data.gapminder()
+px.scatter(df, x="gdpPercap", y="lifeExp", animation_frame="year", animation_group="country",
+           size="pop", color="continent", hover_name="country",
+           log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90])
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-$$\mathbf{X}\boldsymbol{\beta} = \mathbf{y}$$
-$$\mathbf{X} \beta = \mathbf{y}$$
+
+
 
