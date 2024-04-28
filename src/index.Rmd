@@ -1,5 +1,6 @@
 ---
 title: "What do Neural Networks Learn?"
+subtitle: "Subtitle"
 author:
     - "Patrick Dewey"
     - "Aanish Pradhan"
@@ -12,7 +13,7 @@ output:
     fig_caption: true
 ---
 
-```{r setup, include=FALSE, message = FALSE}
+```{r setup, include = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 # Packages
@@ -22,28 +23,107 @@ library(gapminder)
 library(reticulate)
 ```
 
-## R Visualization
-
-```{r echo = TRUE, warning = FALSE}
-plotly::ggplotly(ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
-  geom_point(aes(size = pop, frame = year, ids = country)) +
-  scale_x_log10())
-```
-
-## Python Visualization
-
-```{python message = FALSE}
+```{python Python Packages, echo = FALSE}
+import matplotlib.pyplot as plt # Data visualization
 import numpy as np
-import matplotlib.pyplot as plt
-import plotly.express as px
-
-df = px.data.gapminder()
-px.scatter(df, x="gdpPercap", y="lifeExp", animation_frame="year", animation_group="country",
-           size="pop", color="continent", hover_name="country",
-           log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90])
+import pandas as pd # Data frame manipulation
+import sklearn.datasets as datasets # Datasets
 ```
 
 
+# Decision Boundaries {.tabset}
 
+## Biclusters
+
+```{python Biclusters Data Generation, echo = FALSE}
+biclustersData = datasets.make_blobs(n_samples = 500, n_features = 2, 
+	cluster_std = 2, centers = 2, shuffle = True, random_state = 42)
+X = pd.DataFrame(biclustersData[0], columns = ['x', 'y'])
+y = pd.DataFrame(biclustersData[1], columns = ["cluster"])
+biclustersData = pd.concat([X, y], axis = 1)
+biclustersData.to_csv("../assets/Datasets/biclusters.csv", sep = ',')
+
+del(biclustersData, X, y)
+```
+
+
+```{r Biclusters Data Visualization, echo = FALSE, fig.align = "center", message = FALSE}
+biclustersData <- readr::read_csv("../assets/Datasets/biclusters.csv")
+biclustersData$cluster <- as.factor(biclustersData$cluster)
+
+ggplot(biclustersData) + 
+	geom_point(aes(x, y, color = cluster)) + 
+	labs(title = "Biclusters Data",
+		 subtitle = expression(italic('n')~" = "~500~", σ = 2"),
+		 x = expression(italic('x')),
+		 y = expression(italic('y')),
+		 color = "Cluster",
+		 caption = "Source: scikit-learn v1.4.2") +
+	theme_bw()
+
+rm(biclustersData)
+```
+
+## Circles
+
+```{python Circles Data Generation, echo = FALSE}
+circlesData = datasets.make_circles(n_samples = 500, shuffle = True, noise = 0.05, random_state = 42)
+X = pd.DataFrame(circlesData[0], columns = ['x', 'y'])
+y = pd.DataFrame(circlesData[1], columns = ["cluster"])
+circlesData = pd.concat([X, y], axis = 1)
+circlesData.to_csv("../assets/Datasets/circles.csv", sep = ',')
+
+del(circlesData, X, y)
+```
+
+```{r Circles Data Visualization, echo = FALSE, fig.align = "center", message = FALSE}
+circlesData <- readr::read_csv("../assets/Datasets/circles.csv")
+circlesData$cluster <- as.factor(circlesData$cluster)
+
+ggplot(circlesData) + 
+	geom_point(aes(x, y, color = cluster)) + 
+	labs(title = "Circles Data",
+		 subtitle = expression(italic('n')~" = "~500~", σ = 0.05"),
+		 x = expression(italic('x')),
+		 y = expression(italic('y')),
+		 color = "Cluster",
+		 caption = "Source: scikit-learn v1.4.2") +
+	theme_bw()
+
+rm(circlesData)
+```
+
+
+## Moons
+
+```{python Moons Data Generation, echo = FALSE}
+moonsData = datasets.make_moons(n_samples = 500, shuffle = True, noise = 0.1, 
+	random_state = 42)
+X = pd.DataFrame(moonsData[0], columns = ['x', 'y'])
+y = pd.DataFrame(moonsData[1], columns = ["cluster"])
+moonsData = pd.concat([X, y], axis = 1)
+moonsData.to_csv("../assets/Datasets/moons.csv", sep = ',')
+
+del(moonsData, X, y)
+```
+
+```{r Moons Data Visualization, echo = FALSE, fig.align = "center", message = FALSE}
+moonsData <- readr::read_csv("../assets/Datasets/moons.csv")
+moonsData$cluster <- as.factor(moonsData$cluster)
+
+ggplot(moonsData) + 
+	geom_point(aes(x, y, color = cluster)) + 
+	labs(title = "Moons Data",
+		 subtitle = expression(italic('n')~" = "~500~", σ = 0.1"),
+		 x = expression(italic('x')),
+		 y = expression(italic('y')),
+		 color = "Cluster",
+		 caption = "Source: scikit-learn v1.4.2") +
+	theme_bw()
+
+rm(moonsData)
+```
+
+# Weights and Biases
 
 
