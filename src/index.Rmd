@@ -46,7 +46,7 @@ end. As we grow increasingly reliant on AI models and as these models continue t
 
 # Objectives
 
-Over the course of this project, we set out to bring much-needed transparency to the learning process of neural networks, by visualizing the way network weights and decision boundaries change over the course of the training process. By uncovering what happens during this learning process, we hope to turn AI models into Explainable AI modles (XAI), to allow data scientists and end users to comprehend and trust the results of their algorithms.
+Over the course of this project, we set out to bring much-needed transparency to the learning process of neural networks, by visualizing the way network weights and decision boundaries change over the course of the training process. By uncovering what happens during this learning process, we hope to turn AI models into Explainable AI models (XAI), to allow data scientists and end users to better comprehend and trust the results of their algorithms.
 
 
 # Decision Boundaries
