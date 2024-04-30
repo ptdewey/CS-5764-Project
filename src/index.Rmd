@@ -1,12 +1,11 @@
 ---
 title: "*What* do Neural Networks Learn?"
-subtitle: "Subtitle"
 author:
     - "Patrick Dewey"
     - "Aanish Pradhan"
 date: "May 1, 2024"
-output: 
-  html_document: 
+output:
+  html_document:
     mathjax: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML.js"
     toc: true
     toc_depth: 5
@@ -35,47 +34,50 @@ import pandas as pd # Data frame manipulation
 import sklearn.datasets as datasets # Datasets
 ```
 
-Artificial neural networks (ANNs), or neural networks for short, are some of 
-the most powerful methods in machine learning. With the resurgence in deep 
-learning research starting in 2010, cutting-edge machine learning research has 
-gradually shifted to using ANNs as the go-to method for solving problems.  
+Artificial neural networks (ANNs), or neural networks for short, are some of
+the most powerful methods in machine learning. With the resurgence in deep
+learning research starting in 2010, cutting-edge machine learning research has
+gradually shifted to using ANNs as the go-to method for solving problems.
 
-Neural networks often suffer from being highly unintepretable sometimes being 
-called "black box" models, referring to the seemingly magical nature by which 
-data goes into black, opaque box where results magically appear on the other 
-end. This issue is of serious concern.
+Neural networks suffer from being highly unintepretable often being
+called "black box" models, referring to the seemingly magical nature by which
+data goes into an opaque box where results magically appear on the other
+end. As we grow increasingly reliant on AI models and as these models continue to permeate everyday life, this issue is becoming a serious concern.
 
 # Objectives
 
-We will focus our efforts on classification networks.
+Over the course of this project, we set out to bring much-needed transparency to the learning process of neural networks, by visualizing the way network weights and decision boundaries change over the course of the training process. By uncovering what happens during this learning process, we hope to turn AI models into Explainable AI modles (XAI), to allow data scientists and end users to comprehend and trust the results of their algorithms.
 
 
 # Decision Boundaries
 
-One of the best ways to understand how an ANN is able to classify datapoints of 
-different classes is by understanding how ANNs draw decision boundaries.
+One of the best ways to understand how an ANN is able to classify datapoints of different classes is by understanding how ANNs draw decision boundaries. A decision boudary is the surface (hyper-plane) that a network draws in order to separate data points into separate classes, thereby determining how it classifies future data points.
 
 ## The Universal Approximation Theorem
 
-The Universal Approximation theorem is the primary reason why neural networks 
+The Universal Approximation theorem is the primary reason why neural networks
 function in the first place. The essence of the theorem is as follows:
 
-*Given an arbitrary, differentiable function $f(x)$ there exists a neural 
-network architecture that can approximate $f(x)$ to any desired degree of 
+*Given an arbitrary, differentiable function $f(x)$ there exists a neural
+network architecture that can approximate $f(x)$ to any desired degree of
 accuracy*
+
+In practice, this means it is possible to make a neural network capable of generating predictions for any dataset with reasonable accuracy.
 
 ## Example Datasets {.tabset}
 
-To visualize how a neural network learns to separate two classes, we have 
-selected three datasets: `biclusters`, `circles` and `moons`. These synthetic 
-datasets were generated using the scikit-learn Python package. The two clusters 
-of `biclusters` can be optimally separated with a linear decision boundary 
+To keep the scope of the project within what could be accomplished in a single semester, we focused our efforts on classification networks.
+
+To visualize how a neural network learns to separate two classes, we have
+selected three datasets: `biclusters`, `circles` and `moons`. These synthetic
+datasets were generated using the scikit-learn Python package. The two clusters
+of `biclusters` can be optimally separated with a linear decision boundary
 while the clusters in the other datasets require nonlinear boundaries.
 
 ### Biclusters
 
 ```{python Biclusters Data Generation, echo = FALSE}
-biclustersData = datasets.make_blobs(n_samples = 500, n_features = 2, 
+biclustersData = datasets.make_blobs(n_samples = 500, n_features = 2,
 	cluster_std = 2, centers = 2, shuffle = True, random_state = 42)
 X = pd.DataFrame(biclustersData[0], columns = ['x', 'y'])
 y = pd.DataFrame(biclustersData[1], columns = ["cluster"])
@@ -90,8 +92,8 @@ del(biclustersData, X, y)
 biclustersData <- readr::read_csv("../assets/Datasets/biclusters.csv")
 biclustersData$cluster <- as.factor(biclustersData$cluster)
 
-ggplot(biclustersData) + 
-	geom_point(aes(x, y, color = cluster)) + 
+ggplot(biclustersData) +
+	geom_point(aes(x, y, color = cluster)) +
 	labs(title = "Biclusters Data",
 		 subtitle = expression(italic('n')~" = "~500~", σ = 2"),
 		 x = expression(italic('x')),
@@ -125,8 +127,8 @@ del(circlesData, X, y)
 circlesData <- readr::read_csv("../assets/Datasets/circles.csv")
 circlesData$cluster <- as.factor(circlesData$cluster)
 
-ggplot(circlesData) + 
-	geom_point(aes(x, y, color = cluster)) + 
+ggplot(circlesData) +
+	geom_point(aes(x, y, color = cluster)) +
 	labs(title = "Circles Data",
 		 subtitle = expression(italic('n')~" = "~500~", σ = 0.05"),
 		 x = expression(italic('x')),
@@ -148,7 +150,7 @@ rm(circlesData)
 ### Moons
 
 ```{python Moons Data Generation, echo = FALSE}
-moonsData = datasets.make_moons(n_samples = 500, shuffle = True, noise = 0.1, 
+moonsData = datasets.make_moons(n_samples = 500, shuffle = True, noise = 0.1,
 	random_state = 42)
 X = pd.DataFrame(moonsData[0], columns = ['x', 'y'])
 y = pd.DataFrame(moonsData[1], columns = ["cluster"])
@@ -162,8 +164,8 @@ del(moonsData, X, y)
 moonsData <- readr::read_csv("../assets/Datasets/moons.csv")
 moonsData$cluster <- as.factor(moonsData$cluster)
 
-ggplot(moonsData) + 
-	geom_point(aes(x, y, color = cluster)) + 
+ggplot(moonsData) +
+	geom_point(aes(x, y, color = cluster)) +
 	labs(title = "Moons Data",
 		 subtitle = expression(italic('n')~" = "~500~", σ = 0.1"),
 		 x = expression(italic('x')),
