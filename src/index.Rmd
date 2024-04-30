@@ -1,5 +1,5 @@
 ---
-title: "What do Neural Networks Learn?"
+title: "*What* do Neural Networks Learn?"
 subtitle: "Subtitle"
 author:
     - "Patrick Dewey"
@@ -11,7 +11,12 @@ output:
     toc: true
     toc_depth: 5
     fig_caption: true
+toc-title: "Outline"
+header-includes:
+    - \usepackage{bookdown}
 ---
+
+\newcommand{\dataset}[1]{\textcolor{blue}{\texttt{#1}}}
 
 ```{r setup, include = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -30,10 +35,44 @@ import pandas as pd # Data frame manipulation
 import sklearn.datasets as datasets # Datasets
 ```
 
+Artificial neural networks (ANNs), or neural networks for short, are some of 
+the most powerful methods in machine learning. With the resurgence in deep 
+learning research starting in 2010, cutting-edge machine learning research has 
+gradually shifted to using ANNs as the go-to method for solving problems.  
 
-# Decision Boundaries {.tabset}
+Neural networks often suffer from being highly unintepretable sometimes being 
+called "black box" models, referring to the seemingly magical nature by which 
+data goes into black, opaque box where results magically appear on the other 
+end. This issue is of serious concern.
 
-## Biclusters
+# Objectives
+
+We will focus our efforts on classification networks.
+
+
+# Decision Boundaries
+
+One of the best ways to understand how an ANN is able to classify datapoints of 
+different classes is by understanding how ANNs draw decision boundaries.
+
+## The Universal Approximation Theorem
+
+The Universal Approximation theorem is the primary reason why neural networks 
+function in the first place. The essence of the theorem is as follows:
+
+*Given an arbitrary, differentiable function $f(x)$ there exists a neural 
+network architecture that can approximate $f(x)$ to any desired degree of 
+accuracy*
+
+## Example Datasets {.tabset}
+
+To visualize how a neural network learns to separate two classes, we have 
+selected three datasets: `biclusters`, `circles` and `moons`. These synthetic 
+datasets were generated using the scikit-learn Python package. The two clusters 
+of `biclusters` can be optimally separated with a linear decision boundary 
+while the clusters in the other datasets require nonlinear boundaries.
+
+### Biclusters
 
 ```{python Biclusters Data Generation, echo = FALSE}
 biclustersData = datasets.make_blobs(n_samples = 500, n_features = 2, 
@@ -64,7 +103,13 @@ ggplot(biclustersData) +
 rm(biclustersData)
 ```
 
-## Circles
+<center>
+<video width="910" height="720" controls>
+  <source src="../assets/Decision-Boundaries/Biclusters/output.mp4" type="video/mp4">
+</video>
+</center>
+
+### Circles
 
 ```{python Circles Data Generation, echo = FALSE}
 circlesData = datasets.make_circles(n_samples = 500, shuffle = True, noise = 0.05, random_state = 42)
@@ -93,8 +138,14 @@ ggplot(circlesData) +
 rm(circlesData)
 ```
 
+<center>
+<video width="910" height="720" controls>
+  <source src="../assets/Decision-Boundaries/Circles/output.mp4" type="video/mp4">
+</video>
+</center>
 
-## Moons
+
+### Moons
 
 ```{python Moons Data Generation, echo = FALSE}
 moonsData = datasets.make_moons(n_samples = 500, shuffle = True, noise = 0.1, 
@@ -124,6 +175,17 @@ ggplot(moonsData) +
 rm(moonsData)
 ```
 
-# Weights and Biases
+<center>
+<video width="910" height="720" controls>
+  <source src="../assets/Decision-Boundaries/Moons/output.mp4" type="video/mp4">
+</video>
+</center>
 
+
+
+# Weights and Biases {.tabset}
+
+## MNIST
+
+## CIFAR-10
 
