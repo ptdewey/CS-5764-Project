@@ -1,9 +1,10 @@
 ---
 title: "MNIST Exploratory Analysis"
+author:
+    - "Patrick Dewey"
+    - "Aanish Pradhan"
 output: html_document
 ---
-
-[Return to main page](index.html)
 
 ```{r setup, echo=FALSE, message=FALSE}
 library(plotly) # Interactive data visualization
@@ -11,7 +12,21 @@ library(ggplot2) # Data visualization
 library(Rtsne) # t-SNE
 ```
 
+<!-- [Return to main page](index.html) -->
+```{r, echo=FALSE, results='asis'}
+htmltools::tags$div(
+    htmltools::tags$a(
+        htmltools::tags$button("Return to main page", type = "button", class = "btn btn-primary"),
+        href = "index.html"
+    ),
+    style = "margin-bottom: 20px;"
+)
+```
+
+Note: This page can take some time to load as it includes some computationally intensive 3D plots.
+
 ### Exploratory Data Analysis {.tabset}
+
 
 ```{r MNIST Data Preparation, echo = FALSE, eval = FALSE}
 # DATA INGESTION

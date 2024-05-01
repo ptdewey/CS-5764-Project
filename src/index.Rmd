@@ -276,27 +276,41 @@ rm(moonsData)
 </video>
 </center>
 
-
+---
 
 # Weights and Biases
+
 
 ## MNIST {.tabset}
 
 <!-- NOTE: PCA and TSNE moved to separate page -->
-For details about the exploratory analysis we performed on the dataset, including a couple of different dimensionality reduction techniques we performed to show the distribution of output classes [click here](mnist_exploratory.html).
+For details about the exploratory analysis we performed on the dataset, including a couple of different dimensionality reduction techniques we performed to show the distribution of output classes they can be found here:
+
+```{r, echo=FALSE, results='asis'}
+htmltools::tags$div(
+    htmltools::tags$a(
+        htmltools::tags$button("Explore Dimensionality Reduction Techniques", type = "button", class = "btn btn-primary"),
+        href = "mnist_exploratory.html"
+        #target = "_blank" # uncomment to open in new tab
+    ),
+    style = "margin-bottom: 20px;"
+)
+```
+
+Click on a tab to view weights for the specified hidden layer:
 
 ### Entry to Hidden Layer 1
 
 <center>
-<video width="910" controls>
-  <source src="../assets/Weights/Entry-HL1/output_compressed.mp4" type="video/mp4">
-</video>
+    <video width="910" controls>
+        <source src="../assets/Weights/Entry-HL1/output_compressed.mp4" type="video/mp4">
+    </video>
 </center>
 
 ### Hidden Layer 1 into Hidden Layer 2
 
 <center>
-<video width="910" controls>
-  <source src="../assets/Weights/HL1-HL2/output.mp4" type="video/mp4">
-</video>
+    <video width="910" controls>
+        <source src="../assets/Weights/HL1-HL2/output.mp4" type="video/mp4">
+    </video>
 </center>
