@@ -1,0 +1,107 @@
+---
+title: "MNIST Exploratory Analysis"
+output: html_document
+---
+
+[Return to main page](index.html)
+
+```{r setup, echo=FALSE, message=FALSE}
+library(plotly) # Interactive data visualization
+library(ggplot2) # Data visualization
+library(Rtsne) # t-SNE
+```
+
+### Exploratory Data Analysis {.tabset}
+
+```{r MNIST Data Preparation, echo = FALSE, eval = FALSE}
+# DATA INGESTION
+mnistData <- dslabs::read_mnist()
+
+# DATA FORMATTING
+mnistData$train$labels <- forcats::as_factor(mnistData$train$labels)
+mnistData$test$labels <- forcats::as_factor(mnistData$train$labels)
+
+saveRDS(mnistData, "../assets/Data-Objects/mnistData.rds")
+```
+
+
+#### Principal Components Analysis
+
+```{r MNIST PCA, echo = FALSE}
+mnistData <- readRDS("../assets/Data-Objects/mnistData.rds")
+mnistPCA <- princomp(mnistData$train$images, cor = FALSE)
+mnistPCA$scores <- as.data.frame(mnistPCA$scores)
+PVE <- mnistPCA$sdev^2 / sum(mnistPCA$sdev^2) * 100
+```
+
+```{r MNIST PCA Biplot, echo = FALSE, fig.align = "center", fig.width = 9}
+ggplot(mnistPCA$scores) +
+	geom_point(aes(Comp.1, Comp.2, color = mnistData$train$labels)) +
+	labs(title = "Biplot",
+		 x = "Principal Component 1 (PVE = 9.7%)",
+		 y = "Principal Component 2 (PVE = 7.1%)",
+		 color = "Digit") +
+	theme_bw() +
+ggplot(mnistPCA$scores) +
+	geom_density_2d(aes(Comp.1, Comp.2, color = mnistData$train$labels)) +
+	labs(title = "Density Biplot",
+		 x = "Principal Component 1 (PVE = 9.7%)",
+		 y = "Principal Component 2 (PVE = 7.1%)",
+		 color = "Digit") +
+	theme_bw() +
+patchwork::plot_layout(axes = "collect")
+```
+
+```{r MNIST PCA 3D Plot, echo = FALSE, fig.align = "center", fig.width = 9, warning = FALSE}
+plotly::plot_ly(mnistPCA$scores, x = ~Comp.1, y = ~Comp.2, z = ~Comp.3,
+	type = "scatter3d", mode = "markers", color = mnistData$train$labels) |>
+	plotly::layout(title = "\nPCA 3D Plot",
+		scene = list(xaxis = list(title = "PC 1 (PVE = 9.7%)"),
+		yaxis = list(title = "PC 2 (PVE = 7.1%)"),
+		zaxis = list(title = "PC 3 (PVE = 6.2%)")))
+```
+
+It is evident that linear projections only capture some of the structure of the
+images and that we need to extend our dimensionality reduction efforts. To
+accomplish this, we will leverage the $t$-distributed Stochastic Neighbor
+Embedding ($t$-SNE) algorithm.
+
+#### $t$-distributed Stochastic Neighbor Embedding
+
+
+```{r MNIST t-SNE, echo = FALSE, eval = FALSE}
+mnist2DTSNE <- Rtsne::Rtsne(mnistData$train$images, dims = 2, num_threads = 0)
+saveRDS(mnist2DTSNE, "../assets/Data-Objects/tsne_2D_perplexity_30.rds")
+
+mnist3DTSNE <- Rtsne::Rtsne(mnistData$train$images, dims = 3, num_threads = 0)
+saveRDS(mnist3DTSNE, "../assets/Data-Objects/tsne_3D_perplexity_30.rds")
+```
+
+```{r MNIST t-SNE Biplots, echo = FALSE, fig.align = "center", fig.width = 9}
+mnistTSNE <- readRDS("../assets/Data-Objects//tsne_2D_perplexity_30.rds")
+ggplot(as.data.frame(mnistTSNE$Y)) +
+	geom_point(aes(V1, V2, color = mnistData$train$labels)) +
+	labs(title = "MNIST t-SNE Biplot",
+		 x = 'x',
+		 y = 'y',
+		 color = "Digit") +
+	theme_bw() +
+ggplot(as.data.frame(mnistTSNE$Y)) +
+	geom_density_2d(aes(V1, V2, color = mnistData$train$labels)) +
+	labs(title = "MNIST t-SNE Biplot",
+		 x = 'x',
+		 y = 'y',
+		 color = "Digit") +
+	theme_bw() +
+patchwork::plot_layout(axes = "collect")
+```
+
+```{r MNIST t-SNE 3D Plot, echo = FALSE, fig.align = "center", fig.width = 9, warning = FALSE}
+mnistTSNE <- readRDS("../assets/Data-Objects//tsne_3D_perplexity_30.rds")
+plotly::plot_ly(as.data.frame(mnistTSNE$Y), x = ~V1, y = ~V2, z = ~V3,
+	type = "scatter3d", mode = "markers", color = mnistData$train$labels) |>
+	plotly::layout(title = "\nt-SNE 3D Plot",
+	scene = list(xaxis = list(title = "Embedding Dimension 1"),
+	yaxis = list(title = "Embedding Dimension 2"),
+	zaxis = list(title = "Embedding Dimension 3")))
+```

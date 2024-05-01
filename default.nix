@@ -15,11 +15,14 @@ in pkgs.mkShell rec {
 
         R
         rPackages.rmarkdown
-        rPackages.gapminder
         rPackages.knitr
-        rPackages.plotly
-        rPackages.reticulate
         rPackages.tidyverse
+        rPackages.plotly
+        rPackages.gapminder
+        rPackages.reticulate
+        rPackages.dslabs
+        rPackages.patchwork
+        rPackages.Rtsne
 
         git
     ];
